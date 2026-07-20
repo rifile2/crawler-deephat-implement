@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+outputs/crawl.json
+crawler/crawl_output.json
+test.json

@@ -3,3 +3,7 @@ __pycache__/
 outputs/crawl.json
 crawler/crawl_output.json
 test.json
+# XSS Agent Reports
+xssdetector_report.json
+xssdetector_report.txt
+xssdetector_screenshots/

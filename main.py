@@ -5,9 +5,13 @@ from llm.deephat import DeepHat
 from llm.prompts import PromptBuilder
 from analysis.context_builder import ContextBuilder
 from orchestrator.planner import Planner
+
 from agents.sql_agent import SQLAgent
+from agents.xss_agent import XSSAgent
+from agents.authz_agent import AuthZAgent
 
 def main():
+
     url = input("Enter Target URL: ").strip()
 
     runner = HellhoundRunner(
@@ -18,6 +22,7 @@ def main():
     success = runner.run(url)
 
     if success:
+
         print("\nCrawl Completed Successfully.")
 
         parser = CrawlParser(CRAWL_OUTPUT)
@@ -25,18 +30,21 @@ def main():
 
         context = parser.build_context()
 
+        print(type(context["endpoints"]))
+        print(context["endpoints"][:2])
+
         builder = ContextBuilder(context)
         optimized_context = builder.build()
 
         print("\n========== RAW ENDPOINTS ==========\n")
         print(context.get("endpoints"))
 
-        print("Parsed Context Built Successfully.")
+        print("\nParsed Context Built Successfully.")
 
         prompt_builder = PromptBuilder(optimized_context)
         prompt = prompt_builder.build()
 
-        print(" Prompt Generated Successfully.")
+        print("\nPrompt Generated Successfully.")
         print(f"Prompt Size : {len(prompt)} characters")
 
         ai = DeepHat()
@@ -59,13 +67,16 @@ def main():
         print("\n========== EXECUTION PLAN ==========\n")
 
         for item in execution_plan:
-
             print(item)
-
 
         agent_results = []
 
+        # To avoid running XSS multiple times
+        xss_completed = False
+
         for item in execution_plan:
+
+            # ---------------- SQL Agent ----------------
 
             if item["agent"] == "sql_agent":
 
@@ -85,12 +96,54 @@ def main():
 
                 })
 
+            # ---------------- XSS Agent ----------------
+
+            elif item["agent"] == "xss_agent":
+
+                # XSS scans the full Spider JSON only once
+                if not xss_completed:
+
+                    print("\nRunning XSS Agent...\n")
+
+                    xss = XSSAgent()
+
+                    result = xss.scan(CRAWL_OUTPUT)
+
+                    agent_results.append({
+
+                        "agent": "XSS Agent",
+
+                        "input": CRAWL_OUTPUT,
+
+                        "result": result
+
+                    })
+
+                    xss_completed = True
+
+            elif item["agent"] == "authz_agent":
+
+                print("\nRunning Authorization Agent...\n")
+
+                authz = AuthZAgent()
+
+                result = authz.scan(
+                    optimized_context["target"],
+                    context["endpoints"]
+                )
+
+                agent_results.append({
+                    "agent": "Authorization Agent",
+                    "result": result
+                })
+
         print("\n========== AGENT RESULTS ==========\n")
 
         for result in agent_results:
-
             print(result)
+
     else:
+
         print("\nCrawl Failed.")
 
 

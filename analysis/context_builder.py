@@ -179,6 +179,10 @@ class ContextBuilder:
                 "login", "signin", "signup", "register", "auth", "oauth"
             ],
 
+            "Potential Missing Authorization": [
+                "admin", "dashboard", "manage", "panel", "/admin", "/api/admin", "/dashboard", "/manage", "profile", "user", "account"
+            ],
+
             "Potential File Upload": [
                 "upload", "avatar", "image", "photo", "file", "attachment"
             ],

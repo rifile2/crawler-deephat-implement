@@ -56,10 +56,10 @@ class Planner:
                     "endpoint": endpoint
                 })
 
-            elif "auth" in vuln:
+            elif "missing authorization" in vuln:
 
                 plan.append({
-                    "agent": "auth_agent",
+                    "agent": "authz_agent",
                     "endpoint": endpoint
                 })
 

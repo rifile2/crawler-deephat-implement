@@ -1,6 +1,6 @@
 class ContextBuilder:
     """
-    Optimizes parsed crawl data before sending it to DeepHat.
+    Optimizes parsed crawl data before sending to DeepHat.
     """
 
     def __init__(self, context: dict):
@@ -56,55 +56,30 @@ class ContextBuilder:
         keywords = [
 
             "login",
-
             "signin",
-
             "signup",
-
             "register",
-
             "admin",
-
             "dashboard",
-
             "panel",
-
             "auth",
-
             "oauth",
-
             "upload",
-
             "avatar",
-
             "image",
-
             "file",
-
             "api",
-
             "graphql",
-
             "rest",
-
             "payment",
-
             "checkout",
-
             "user",
-
             "profile",
-
             "account",
-
             "search",
-
             "query",
-
             "comment",
-
             "feedback",
-
             "review"
 
         ]
@@ -128,15 +103,10 @@ class ContextBuilder:
         for item in self.context.get("header_audit", []):
 
             findings.append(
-
                 {
-
                     "severity": item.get("severity"),
-
                     "issue": item.get("issue")
-
                 }
-
             )
 
         return findings
@@ -154,7 +124,6 @@ class ContextBuilder:
         waf = self.context.get("waf", [])
 
         if not waf:
-
             return "None"
 
         return waf[0].get("waf", "Unknown")
@@ -167,37 +136,129 @@ class ContextBuilder:
 
         patterns = {
 
+            # ====================================================
+            # ACTIVE AGENT 1: SQL INJECTION
+            # ====================================================
+
             "Potential SQL Injection": [
-                "search", "?q=", "?query=", "?id=", "?product=", "?category=", "?page="
+                "search",
+                "?q=",
+                "?query=",
+                "?id=",
+                "?product=",
+                "?category=",
+                "?page="
             ],
+
+            # ====================================================
+            # ACTIVE AGENT 2: XSS
+            # ====================================================
 
             "Potential Cross-Site Scripting (XSS)": [
-                "comment", "feedback", "review", "message", "contact", "chat"
+                "comment",
+                "feedback",
+                "review",
+                "message",
+                "contact",
+                "chat"
             ],
 
-            "Potential Authentication Weakness": [
-                "login", "signin", "signup", "register", "auth", "oauth"
-            ],
+            # ====================================================
+            # ACTIVE AGENT 3: MISSING AUTHORIZATION
+            # ====================================================
 
             "Potential Missing Authorization": [
-                "admin", "dashboard", "manage", "panel", "/admin", "/api/admin", "/dashboard", "/manage", "profile", "user", "account"
+                "admin",
+                "dashboard",
+                "manage",
+                "panel",
+                "/admin",
+                "/api/admin",
+                "/dashboard",
+                "/manage",
+                "profile",
+                "user",
+                "account"
             ],
 
-            "Potential File Upload": [
-                "upload", "avatar", "image", "photo", "file", "attachment"
+            # ====================================================
+            # ACTIVE AGENT 4: NOSQL INJECTION
+            # ====================================================
+
+            "Potential NoSQL Injection": [
+                "?query=",
+                "?filter=",
+                "?search=",
+                "?where=",
+                "?find=",
+                "?sort=",
+                "?order=",
+                "?username=",
+                "?email=",
+                "?user=",
+                "mongo",
+                "mongodb"
             ],
 
-            "Potential IDOR": [
-                "/user/", "/profile/", "/account/", "/api/user", "?user=", "?id="
-            ],
+            # ====================================================
+            # ACTIVE AGENT 5: PASSWORD POLICY
+            # ====================================================
 
-            "Potential Admin Exposure": [
-                "admin", "dashboard", "manage", "panel", "console"
-            ],
-
-            "Potential API Endpoint": [
-                "/api/", "/graphql", "/rest/"
+            "Potential Weak Password Policy": [
+                "login",
+                "signin",
+                "signup",
+                "register",
+                "auth",
+                "password",
+                "forgot-password",
+                "reset-password"
             ]
+
+            # ====================================================
+            # INACTIVE AGENTS - TEMPORARILY DISABLED
+            # ====================================================
+
+            # "Potential Authentication Weakness": [
+            #     "login",
+            #     "signin",
+            #     "signup",
+            #     "register",
+            #     "auth",
+            #     "oauth"
+            # ],
+
+            # "Potential File Upload": [
+            #     "upload",
+            #     "avatar",
+            #     "image",
+            #     "photo",
+            #     "file",
+            #     "attachment"
+            # ],
+
+            # "Potential IDOR": [
+            #     "/user/",
+            #     "/profile/",
+            #     "/account/",
+            #     "/api/user",
+            #     "?user=",
+            #     "?id="
+            # ],
+
+            # "Potential Admin Exposure": [
+            #     "admin",
+            #     "dashboard",
+            #     "manage",
+            #     "panel",
+            #     "console"
+            # ],
+
+            # "Potential API Endpoint": [
+            #     "/api/",
+            #     "/graphql",
+            #     "/rest/"
+            # ]
 
         }
 
@@ -249,11 +310,8 @@ class ContextBuilder:
         stats = {
 
             "critical": 0,
-
             "high": 0,
-
             "medium": 0,
-
             "low": 0
 
         }

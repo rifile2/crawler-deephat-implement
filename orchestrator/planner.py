@@ -1,12 +1,10 @@
 class Planner:
-
     """
     Decides which security agents should run
     based on DeepHat's potential vulnerabilities.
     """
 
     def __init__(self, context: dict):
-
         self.context = context
 
     def build_execution_plan(self):
@@ -18,8 +16,9 @@ class Planner:
         for finding in findings:
 
             vuln = finding.get("vulnerability", "").lower()
-
             endpoint = finding.get("endpoint", "")
+
+            # ---------------- SQL Agent ----------------
 
             if "sql" in vuln:
 
@@ -28,6 +27,8 @@ class Planner:
                     "endpoint": endpoint
                 })
 
+            # ---------------- XSS Agent ----------------
+
             elif "xss" in vuln:
 
                 plan.append({
@@ -35,38 +36,30 @@ class Planner:
                     "endpoint": endpoint
                 })
 
-            elif "idor" in vuln:
+            # ---------------- Password Policy Agent ----------------
+
+            elif "password" in vuln:
 
                 plan.append({
-                    "agent": "idor_agent",
+                    "agent": "password_policy_agent",
                     "endpoint": endpoint
                 })
 
-            elif "csrf" in vuln:
+            # ---------------- NoSQL Agent ----------------
+
+            elif "nosql" in vuln or "no sql" in vuln:
 
                 plan.append({
-                    "agent": "csrf_agent",
+                    "agent": "nosql_agent",
                     "endpoint": endpoint
                 })
 
-            elif "upload" in vuln:
-
-                plan.append({
-                    "agent": "upload_agent",
-                    "endpoint": endpoint
-                })
+            # ---------------- Authorization Agent ----------------
 
             elif "missing authorization" in vuln:
 
                 plan.append({
                     "agent": "authz_agent",
-                    "endpoint": endpoint
-                })
-
-            elif "ssrf" in vuln:
-
-                plan.append({
-                    "agent": "ssrf_agent",
                     "endpoint": endpoint
                 })
 

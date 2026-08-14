@@ -1480,6 +1480,12 @@ class PasswordPolicyCheckerAgent:
             self.teardown()
 
 
+class PasswordPolicyAgent:
+    def scan(self, target):
+        agent = PasswordPolicyCheckerAgent(target)
+        return agent.run()
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

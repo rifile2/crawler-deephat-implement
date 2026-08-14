@@ -7,3 +7,8 @@ test.json
 xssdetector_report.json
 xssdetector_report.txt
 xssdetector_screenshots/
+steerwings.com_endpoint_logs
+testaspnet.vulnweb.com_endpoint_logs
+created_accounts.json
+password_policy_report.json
+.env
